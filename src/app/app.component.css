@@ -1,0 +1,82 @@
+.container-fluid {
+  background-color: #f8f8f8;
+  height: 100vh
+}
+
+h1 {
+  font-size: 3.3em;
+  font-weight:700;
+  color:#23255a
+}
+
+.logo-text{
+  display: flex;
+  align-items: center
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  text-align: center
+}
+
+.col-xl-6 {
+  margin-top: 1.4em
+}
+
+.mat-form-field {
+  padding: 0.7em 1.7em;
+  background: #fff;
+  font-size: 15px;
+  width: 100%;
+}
+
+.table {
+  margin-bottom: 0;
+  font-family:inherit;
+}
+
+.table td {
+  vertical-align: middle
+}
+
+.up {
+  color:green
+}
+
+.warning {
+  color:orange
+}
+
+.down {
+  color:red
+}
+
+.fail {
+  color:red
+}
+
+.pass {
+  color:green
+}
+
+.error-row {
+  background-color: #f8d5d5
+}
+
+@media screen and (max-width: 770px) {
+  .logo {
+    display: block;
+  }
+  h1 {
+    display: flex;
+    justify-content: center
+  }
+}
+
+@media screen and (max-width: 400px) {
+
+  h1 {
+    font-size: 2.5em;
+  }
+}
