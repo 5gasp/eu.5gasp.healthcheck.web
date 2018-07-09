@@ -52,13 +52,13 @@
               </ng-container>
 
               <ng-container matColumnDef="last_sync">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Sync </th>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Seen </th>
                 <td mat-cell *matCellDef="let element"> {{element.lastSeenUTC }} </td>
               </ng-container>
 
               <ng-container matColumnDef="threshold">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Threshold </th>
-                <td mat-cell *matCellDef="let element"> {{element.failoverThreshold}} min </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Threshold</th>
+                <td mat-cell *matCellDef="let element"> {{element.failoverThreshold/60}} min</td>
               </ng-container>
 
 

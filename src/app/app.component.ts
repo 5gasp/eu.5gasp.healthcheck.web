@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatTableDataSource, MatSort } from '@angular/material';
-import { timer } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 // import 'rxjs/add/observable/timer'
 
 
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    timer(0, 1800000).subscribe( () => {
+    timer(0, 60000).subscribe( () => {
       this.http.get<Config>('assets/config.json').subscribe(
         data => {this.API = data.API},
         error => {console.error("Cannot GET config file!")},
@@ -135,37 +135,3 @@ export class AppComponent implements OnInit {
 export interface Config {
   API: string;
 }
-
-
-// export interface HealthTable {
-//     name: string;
-//     type: string;
-//     location: string;
-//     status: string;
-//     last_sync: Date;
-//     threshold: string;
-//     coordinates?: L.LatLng
-// }
-
-// const ELEMENT_DATA: HealthTable[] = [
-//     {name:'PORTAL', type:'SERVICE', location:'Patras, GR', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(38.2466395, 21.734574)},
-//     {name:'OSM', type:'SERVICE', location:'Madrid, SP', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(40.4167754, -3.7037902)},
-//     {name:'VNF_TEST_DEPLOYMENT', type:'PROCESS', location:'', status:'PASS', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30'},
-//     {name:'MSD_TEST_DEPLOYMENT', type:'PROCESS', location:'', status:'FAIL', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30'},
-//     {name:'5TONIC', type:'INFRASTRUCTURE', location:'Madrid, SP', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(40.4167754, -3.7037902)},
-//     {name:'EHEALTH', type:'INFRASTRUCTURE', location:'Poznan, PL', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(52.406374, 16.9251681)},
-//     {name:'IT-AV', type:'INFRASTRUCTURE', location:'Aveiro, PT', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(40.6405055, -8.6537539)},
-//     {name:'BRISTOL', type:'INFRASTRUCTURE', location:'Bristol, UK', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(51.454513, -2.58791)},
-//     {name:'NITOS', type:'INFRASTRUCTURE', location:'Volos, GR', status:'DOWN', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(39.3621896, 22.942159)},
-//     {name:'WINS', type:'INFRASTRUCTURE', location:'Dublin, IR', status:'DOWN', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(53.3498053, -6.2603097)},
-//     {name:'UFU', type:'INFRASTRUCTURE', location:'Uberlândia, BR', status:'DOWN', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '30', coordinates: L.latLng(-18.9127534, -48.275484)},
-//
-//     {name:'PORTAL-OSM', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-5TONIC', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-EHEALTH', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-IT-AV', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-BRISTOL', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-NITOS', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-WINS', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'},
-//     {name:'OSM-UFU', type:'LINK', location:'', status:'ALIVE', last_sync:new Date(2018, 5, 21, 10, 28, 33), threshold: '60'}
-// ];

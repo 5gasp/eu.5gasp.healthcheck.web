@@ -64,6 +64,10 @@ h1 {
   background-color: #f8d5d5
 }
 
+th.mat-header-cell:last-child {
+    padding-right: 0px;
+}
+
 @media screen and (max-width: 770px) {
   .logo {
     display: block;
