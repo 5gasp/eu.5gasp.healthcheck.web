@@ -35,52 +35,50 @@ export class AppComponent implements OnInit {
         () => {
           this.http.get<any>(this.API).subscribe(
             data => {
+              console.log(data)
               this.dataSource.data = data
               this.dataSource.sort = this.sort;
             },
             error => console.error(error),
             () => {
+
               this.dataSource.data.forEach( (element) => {
-                if (element["type"] == 'SERVICE' || element["type"] == 'VIM') {
+                if (element["latitude"] != '')
+                {
 
-                  if (element["name"] == 'OSM' || element["name"] == 'PORTAL') {
-                    var marker = L.marker(L.latLng(element["latitude"], element["longitude"]), {
-                      icon:L.icon ({
-                        iconSize: [1,1],
-                        // iconSize: [25,41],
-                        iconAnchor: [13,41],
-                        iconUrl: 'assets/marker-icon.png',
-                        // shadowUrl: 'assets/marker-shadow.png'
-                      })
-                    }).bindTooltip(`<a>${element["name"]}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element["status"])}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element["status"])}'>${element["status"]}</span></b>`, {permanent:true, direction:'bottom' });
-                  } else {
+                  if (element["type"] == 'SERVICE' || element["type"] == 'VIM') {
+                    if (element["name"] == 'OSM' || element["name"] == 'PORTAL') {
+                      var marker = L.marker(L.latLng(element["latitude"], element["longitude"]), {
+                        icon:L.icon ({
+                          iconSize: [1,1],
+                          // iconSize: [25,41],
+                          iconAnchor: [13,41],
+                          iconUrl: 'assets/marker-icon.png',
+                          // shadowUrl: 'assets/marker-shadow.png'
+                        })
+                      }).bindTooltip(`<a>${element["name"]}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element["status"])}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element["status"])}'>${element["status"]}</span></b>`, {permanent:true, direction:'bottom' });
+                    } else {
 
-                    var marker = L.marker(L.latLng(element["latitude"], element["longitude"]), {
-                      icon:L.icon ({
-                        iconSize: [1,1],
-                        // iconSize: [25,41],
-                        iconAnchor: [13,41],
-                        iconUrl: 'assets/marker-icon.png',
-                        // shadowUrl: 'assets/marker-shadow.png'
-                      })
-                    }).bindTooltip(`<a>${element["name"]}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element["status"])}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element["status"])}'>${element["status"]}</span></b>`, {permanent:true, direction:'top' });
+                      var marker = L.marker(L.latLng(element["latitude"], element["longitude"]), {
+                        icon:L.icon ({
+                          iconSize: [1,1],
+                          // iconSize: [25,41],
+                          iconAnchor: [13,41],
+                          iconUrl: 'assets/marker-icon.png',
+                          // shadowUrl: 'assets/marker-shadow.png'
+                        })
+                      }).bindTooltip(`<a>${element["name"]}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element["status"])}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element["status"])}'>${element["status"]}</span></b>`, {permanent:true, direction:'top' });
+                    }
+                    this.mapLayers.push(marker);
                   }
+                  else if (element['type'] == "CONNECTIVITY") {
 
-
-                  this.mapLayers.push(marker);
+                    let line = L.polyline([L.latLng(element["latitude"], element["longitude"]), L.latLng(element["linkEndLatitude"], element["linkEndLongitude"])], {weight:3, color:this.setConnectivityStatusColor(element['status']), dashArray: this.setConnectivityDashArray(element['status'])})
+                    this.mapLayers.push(line);
+                  }
                 }
               })
 
-              let PORTAL_OSM = L.polyline([L.latLng(38.2466395, 21.734574), L.latLng(40.4167754, -3.7037902)], {weight:3, color:this.setConnectivityStatusColor('PORTAL_OSM')})
-              let OSM_5TONIC = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(40.4167754, -3.7037902)], {weight:3, color:this.setConnectivityStatusColor('OSM_5TONIC')})
-              let OSM_EHEALTH = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(52.406374, 16.9251681)], {weight:3, color:this.setConnectivityStatusColor('OSM_EHEALTH')})
-              let OSM_IT_AV = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(40.6405055, -8.6537539)], {weight:3, color:this.setConnectivityStatusColor('OSM_IT_AV')})
-              let OSM_BRISTOL = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(51.454513, -2.58791)], {weight:3, color:this.setConnectivityStatusColor('OSM_BRISTOL')})
-              let OSM_WINGS = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(53.3498053, -6.2603097)], {weight:3, color:this.setConnectivityStatusColor('OSM_WINGS')})
-              let OSM_5G_VINO = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(39.3621896, 22.942159)], {weight:3, color:this.setConnectivityStatusColor('OSM_5G_VINO')})
-              let OSM_UFU = L.polyline([L.latLng(40.4167754, -3.7037902), L.latLng(-18.9127534, -48.275484)], {weight:3, color:this.setConnectivityStatusColor('OSM_UFU')})
-
-              this.mapLayers.push(PORTAL_OSM, OSM_5TONIC, OSM_EHEALTH, OSM_IT_AV, OSM_BRISTOL, OSM_WINGS, OSM_5G_VINO, OSM_UFU)
             }
           )
         }
@@ -96,9 +94,16 @@ export class AppComponent implements OnInit {
     };
   }
 
-  setConnectivityStatusColor(link_name) {
-    let status = this.dataSource.data.find((element) => { return element['name'] == link_name.replace(/_/g,"-")})['status']
+  setConnectivityStatusColor(status) {
     return this.setStatusColor(status)
+  }
+
+  setConnectivityDashArray(status) {
+    if (status == "UP") {
+      return '0'
+    } else {
+      return '30 15'
+    }
   }
 
   setStatusColor (status) {
@@ -117,8 +122,8 @@ export class AppComponent implements OnInit {
   }
 
   applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    filterValue = filterValue.trim();
+    filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 

@@ -6,7 +6,8 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { MatFormFieldModule,
          MatInputModule,
-         MatSortModule } from '@angular/material';
+         MatSortModule,
+         MatTooltipModule} from '@angular/material';
 import { MatTableModule } from '@angular/material/table';
 
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
@@ -23,6 +24,7 @@ import { AppComponent } from './app.component';
     MatFormFieldModule,
     MatInputModule,
     MatSortModule,
+    MatTooltipModule,
     MatTableModule,
     LeafletModule,
     HttpClientModule
