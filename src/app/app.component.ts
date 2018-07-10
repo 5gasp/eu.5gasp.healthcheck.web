@@ -35,7 +35,6 @@ export class AppComponent implements OnInit {
         () => {
           this.http.get<any>(this.API).subscribe(
             data => {
-              console.log(data)
               this.dataSource.data = data
               this.dataSource.sort = this.sort;
             },
