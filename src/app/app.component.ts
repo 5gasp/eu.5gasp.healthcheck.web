@@ -33,7 +33,7 @@ export class AppComponent implements OnInit {
     this.mapInit = {
       layers: [openStreetMaps],
       zoom: 5,
-      center: L.latLng(46.5540527621168, 9.328354404567692)
+      center: L.latLng(46.5540527621168, 7.5228354404567692)
     }
     
     this.http.get<Config>('assets/config.json').subscribe(
@@ -52,34 +52,62 @@ export class AppComponent implements OnInit {
               let marker: L.Marker;
               this.mapLayers = []
               
+              let portalsArray: Components[][] = []
               this.dataSource.data.forEach( (element:Components) => {
                 if (element.latitude && element.longitude)
                 {
                   if (element.type === 'SERVICE' || element.type === 'VIM') {
                     
+                    //Logic for Service type elements that include word "portal"
+                    //Group these Services in an Array of Arrays per locationName
                     if (element.name.toLowerCase().includes('portal')) {
-                      popupDirection = "bottom"
-                    } else {
+                      let locationPortalFilter = portalsArray.filter(el => el[0].locationName === element.locationName)
+                      if (!portalsArray.length || !locationPortalFilter.length) {
+                        portalsArray.push([element])
+                      } 
+                      if (locationPortalFilter.length) {
+                        portalsArray[portalsArray.findIndex(el => el[0].locationName === element.locationName)].push(element)
+                      }
+                    }  else {
                       popupDirection = "top"
+                      marker = L.marker(L.latLng(+element.latitude, +element.longitude), {
+                        icon:L.icon ({
+                          iconSize: [1,1],
+                          // iconSize: [25,41],
+                          iconAnchor: [13,41],
+                          iconUrl: 'assets/marker-icon.png',
+                          // shadowUrl: 'assets/marker-shadow.png'
+                        })
+                      }).bindTooltip(`<a>${element.name}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element.status)}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element.status)}'>${element.status}</span></b>`, {permanent:true, direction:popupDirection });
+  
+                      this.mapLayers.push(marker);
                     }
 
-                    marker = L.marker(L.latLng(+element.latitude, +element.longitude), {
-                      icon:L.icon ({
-                        iconSize: [1,1],
-                        // iconSize: [25,41],
-                        iconAnchor: [13,41],
-                        iconUrl: 'assets/marker-icon.png',
-                        // shadowUrl: 'assets/marker-shadow.png'
-                      })
-                    }).bindTooltip(`<a>${element.name}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(element.status)}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(element.status)}'>${element.status}</span></b>`, {permanent:true, direction:popupDirection });
-
-                    this.mapLayers.push(marker);
                   }
 
                   else if (element.type === "CONNECTIVITY") {
                     this.mapLayers.push(L.polyline([L.latLng(+element.latitude, +element.longitude), L.latLng(+element.linkEndLatitude, +element.linkEndLongitude)], {weight:3, color:this.setConnectivityStatusColor(element.status), dashArray: this.setConnectivityDashArray(element.status)}));
                   }
                 }
+              })
+
+              portalsArray.forEach( (element:Components[]) => {
+                let tooltipText = ''
+                element.forEach((internalElement:Components) => {
+                  tooltipText += `<div><a>${internalElement.name}</a></br><b><span style='height:8px; width:8px; background-color:${this.setStatusColor(internalElement.status)}; border-radius:50%; display:inline-block; margin-right:3px'></span><span style='color:${this.setStatusColor(internalElement.status)}'>${internalElement.status}</span></b></div>`
+                })
+                marker = L.marker(L.latLng(+element[0].latitude, +element[0].longitude), {
+                  icon:L.icon ({
+                    iconSize: [1,1],
+                    // iconSize: [25,41],
+                    iconAnchor: [13,41],
+                    iconUrl: 'assets/marker-icon.png',
+                    // shadowUrl: 'assets/marker-shadow.png'
+                  })
+                }).bindTooltip(tooltipText, {permanent:true, direction:'bottom' });
+
+                this.mapLayers.push(marker);
+
               })
             }
           )
