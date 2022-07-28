@@ -54,8 +54,11 @@
               </ng-container>
 
               <ng-container matColumnDef="last_sync">
-                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Seen </th>
-                <td mat-cell *matCellDef="let element"> {{element.lastSeenUTC }} </td>
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Seen (Local Time) </th>
+                <td mat-cell *matCellDef="let element">
+                  <span *ngIf='element.lastSeenUTC === "NEVER"; else lastSeenTime'>NEVER</span>
+                  <ng-template #lastSeenTime>{{element.lastSeenUTC | date:'d/MM/yy - H:mm:ss (zzzz)'}}</ng-template> 
+                </td>
               </ng-container>
 
               <ng-container matColumnDef="threshold">
